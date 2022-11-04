@@ -1,10 +1,10 @@
-# Manipulation de signaux audio  (chapitre 10.1)
+# Manipulation de signaux audio  (chapitre 10)
 
 <!-- Avant de commencer. Consulter les instructions à suivre dans [instructions.md](instructions.md) -->
 
-Nous allons reprendre l'exemple du chapitre 8.2, mais en manipulant les signaux audio avec numpy plutôt qu'avec des listes et *struct*.
+Nous allons reprendre l'exemple du chapitre 8 sur les fichiers WAV, mais en manipulant les signaux audio avec numpy plutôt qu'avec des listes et *struct*.
 
-## Structure d'un fichier WAV (rappel des exercices 8.2)
+## Structure d'un fichier WAV (rappel des exercices 8)
 
 En audio numérique, la modulation d’impulsion codée (PCM en anglais) est une méthode utilisée pour représenter numériquement un signal analogique échantillonné. C’est ce qui est utilisé dans les ordinateurs, dans les CD audio et en téléphonie numérique. Dans un flux PCM, l’amplitude du signal analogique est enregistrée comme une valeur numérique à intervalles réguliers, c’est ce qu’on appelle l’échantillonnage. L’intervalle entre les échantillons est donné par la fréquence d’échantillonnage, qui est exprimée en Hz.
 
@@ -26,11 +26,13 @@ Pour avoir une introduction plus détaillée sur l’échantillonnage et sur les
 
 Retournez un tableau Numpy de réels où chaque élément est un échantillon d'une onde sinusoïdale. On se rappelle de la formule de la valeur y d'une onde sinusoïdale à l'angle x en fonction de sa fréquence F et de son amplitude A :
 
-<img src="https://render.githubusercontent.com/render/math?math=y(x) = A \cdot \sin(F \cdot x)">
+<!-- y(x) = A \cdot \sin(F \cdot x) -->
+<img src="https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20y%28x%29%20%3D%20A%20%5Ccdot%20%5Csin%28F%20%5Ccdot%20x%29">
 
-Si on veut le *x* qui correspond à un moment t (en secondes), on peut dire que 2π représente une seconde, donc :
+Si on veut le *x* qui correspond à un moment *t* (en secondes), on peut dire que 2π représente une seconde, donc :
 
-<img src="https://render.githubusercontent.com/render/math?math=x(t) = 2 \pi t">
+<!-- x(t) = 2 \pi t -->
+<img src="https://latex.codecogs.com/png.latex?\bg_white%20\large%20x(t)%20=%202%20\pi%20t">
 
 Or, on a autant de valeurs de *t* qu'on a d'échantillons. Vous devez donc utiliser le taux d'échantillonage (constante `SAMPLING_FREQ` dans le code) pour calculer le nombre d'échantillons nécessaires pour une durée donnée.
 
@@ -42,7 +44,8 @@ Indices :
 
 Retournez un tableau Numpy de réels représentant une onde carrée. Voici la formule d'une onde carrée
 
-<img src="https://render.githubusercontent.com/render/math?math=y(t) = \sgn(\sin(F \cdot 2 \pi t))">
+<!-- y(t) = \textup{sgn}(\sin(F \cdot 2 \pi t)) -->
+<img src="https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20y%28t%29%20%3D%20%5Ctextup%7Bsgn%7D%28%5Csin%28F%20%5Ccdot%202%20%5Cpi%20t%29%29">
 
 Où t est le temps en secondes (même concepts que dans la fonction précédente) , *sgn* représente la fonction de signe.
 
@@ -51,7 +54,7 @@ Indices :
 
 ### Conversion en octets (`convert_to_bytes` et `convert_to_samples`)
 
-Même chose que pour les exercices 8.2, mais en utilisant les fonctionnalités de Numpy.
+Même chose que pour les exercices du chapitre 88, mais en utilisant les fonctionnalités de Numpy.
 
 Indices:
     [numpy.round](https://numpy.org/doc/stable/reference/generated/numpy.round.html),
@@ -77,7 +80,7 @@ On obtiendrait un signal dont la fondamentale est 440 Hz, et dont la première h
 
 ### Normalisation d'un signal (`normalize`)
 
-Normalisez un signal à une certaine amplitude. Pour ce faire, il faut trouver l'échantillon le plus haut en valeur absolue, puis calculerle coefficient à appliquer pour ammener l'échantillon maximal à la cible de normalisation. On applique ensuite ce coefficient à tout le signal.
+Normalisez un signal à une certaine amplitude. Pour ce faire, il faut trouver l'échantillon le plus haut en valeur absolue, puis calculer le coefficient à appliquer pour ammener l'échantillon maximal à la cible de normalisation. On applique ensuite ce coefficient à tout le signal.
 
 Indices:
     [numpy.absolute](https://numpy.org/doc/stable/reference/generated/numpy.absolute.html)
