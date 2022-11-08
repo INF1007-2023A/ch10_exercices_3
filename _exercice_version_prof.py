@@ -25,8 +25,8 @@ def separate_channels(samples, num_channels):
 
 def generate_sample_time_points(duration):
 	# Générer un tableau de points temporels également espacés en seconde sur la durée donnée
-	# On a SAMPLING_FREQ points par seconde, donc un step de 1 / fréquence d'échantillonnage
-	return np.arange(0, duration, 1 / SAMPLING_FREQ)
+	# On a SAMPLING_FREQ points par seconde, donc duration * SAMPLING_FREQ échantillons
+	return np.linspace(0, duration, duration * SAMPLING_FREQ)
 
 def sine(freq, amplitude, duration):
 	# Générer une onde sinusoïdale à partir de la fréquence et de l'amplitude donnée, sur le temps demandé et considérant le taux d'échantillonnage.
