@@ -39,6 +39,10 @@ def square(freq, amplitude, duration):
 	# Générer une onde carrée d'une fréquence et amplitude donnée.
 	pass
 
+def sawtooth(freq, amplitude, duration):
+	# Générer une onde en dents de scie (sawtooth) à partir de l'amplitude et fréquence donnée.
+	pass
+
 def sine_with_overtones(root_freq, amplitude, overtones, duration):
 	# Générer une onde sinusoïdale avec ses harmoniques. Le paramètre overtones est une liste de tuple où le premier élément est le multiple de la fondamentale et le deuxième élément est l'amplitude relative de l'harmonique.
 	pass
