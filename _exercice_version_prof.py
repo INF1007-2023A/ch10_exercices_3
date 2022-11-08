@@ -7,7 +7,7 @@ import struct
 import math
 
 import numpy as np
-import scipy
+import matplotlib.pyplot as plt
 
 
 SAMPLING_FREQ = 44100 # Hertz, taux d'échantillonnage standard des CD
@@ -37,12 +37,19 @@ def sine(freq, amplitude, duration):
 
 	# y = A * sin(F * 2π*t)
 	time_points = generate_sample_time_points(duration)
-	return amplitude * np.sin(freq * time_points * 2*np.pi)
+	return amplitude * np.sin(freq * 2*np.pi * time_points)
 
 def square(freq, amplitude, duration):
 	# Générer une onde carrée d'une fréquence et amplitude donnée.
 	# y = A * sgn(sin(F * 2π*t))
 	return amplitude * np.sign(sine(freq, 1, duration))
+
+def sawtooth(freq, amplitude, duration):
+	# Générer une onde en dents de scie (sawtooth) à partir de l'amplitude et fréquence donnée.
+	# La formule d'une onde en dents de scie à un temps t en fonction de la fréquence F et de l'amplitude A :
+	# y = A * 2(t * F - floor(1/2 + t * F))
+	t = generate_sample_time_points(duration)
+	return amplitude * 2 * (t * freq - np.floor(1.0/2.0 + t * freq))
 
 def sine_with_overtones(root_freq, amplitude, overtones, duration):
 	# Générer une onde sinusoïdale avec ses harmoniques. Le paramètre overtones est une liste de tuple où le premier élément est le multiple de la fondamentale et le deuxième élément est l'amplitude relative de l'harmonique.
@@ -95,6 +102,18 @@ def main():
 	except:
 		pass
 
+	# On affiche une onde d'exemple 
+	xs = generate_sample_time_points(3)
+	ys = square(1.0, 0.5, 3) + sawtooth(10.0, 0.1, 3)
+	plt.figure(figsize=(12, 6))
+	plt.plot(xs, ys)
+	plt.grid(color="wheat")
+	plt.ylim([-1.1, 1.1])
+	plt.xlim([0, 2])
+	plt.xlabel("t (s)")
+	plt.ylabel("y")
+	plt.show()
+
 	# Exemple d'un la et mi (quinte juste), un dans le channel gauche et l'autre dans le channel droit
 	with wave.open("output/perfect_fifth_panned.wav", "wb") as writer:
 		# On fait la config du writer (2 channels, échantillons de deux octets, fréquence d'échantillonnage).
@@ -103,8 +122,10 @@ def main():
 		writer.setframerate(SAMPLING_FREQ)
 
 		# On génére un la3 (220 Hz) et un mi4 (intonation juste, donc ratio de 3/2)
-		samples1 = sine(220, 0.9, 30.0)
-		samples2 = sine(220 * (3/2), 0.7, 30.0)
+		#samples1 = sine(220, 0.9, 30.0)
+		samples1 = sawtooth(220, 0.9, 30.0)
+		#samples2 = sine(220 * (3/2), 0.7, 30.0)
+		samples2 = sawtooth(220 * (3/2), 0.7, 30.0)
 
 		# On met les samples dans des channels séparés (la à gauche, mi à droite)
 		merged = merge_channels([samples1, samples2])
