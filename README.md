@@ -24,6 +24,10 @@ Pour avoir une introduction plus détaillée sur l’échantillonnage et sur les
 
 ### Sinusoïdal (`sine`)
 
+Rappel : voici de quoi a l'air une onde sinusoïdale de 1Hz avec une amplitude de 1 (donc allant de -1 à 1):
+
+<img src="doc/sine_1hz.png">
+
 Retournez un tableau Numpy de réels où chaque élément est un échantillon d'une onde sinusoïdale. On se rappelle de la formule de la valeur y d'une onde sinusoïdale à l'angle x en fonction de sa fréquence F et de son amplitude A :
 
 <!-- y(x) = A \cdot \sin(F \cdot x) -->
@@ -42,17 +46,25 @@ Indices :
 
 ### Carré (`square`)
 
-Retournez un tableau Numpy de réels représentant une onde carrée. Voici la formule d'une onde carrée
+Rappel : voici de quoi a l'air une onde carrée de 1Hz avec une amplitude de 1 (donc allant de -1 à 1):
+
+<img src="doc/square_1hz.png">
+
+Retournez un tableau Numpy de réels représentant une onde carrée. Voici la formule d'une onde carrée :
 
 <!-- y(t) = \textup{sgn}(\sin(F \cdot 2 \pi t)) -->
 <img src="https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20y%28t%29%20%3D%20%5Ctextup%7Bsgn%7D%28%5Csin%28F%20%5Ccdot%202%20%5Cpi%20t%29%29">
 
-Où t est le temps en secondes (même concepts que dans la fonction précédente) , *sgn* représente la fonction de signe.
+Où *t* est le temps en secondes (même concepts que dans la fonction précédente) , *sgn* représente la fonction de signe.
 
 Indices :
     [numpy.sign](https://numpy.org/doc/stable/reference/generated/numpy.sign.html)
 
 ### Dents de scie (`sawtooth`)
+
+Rappel : voici de quoi a l'air une onde en dents de scie de 1Hz avec une amplitude de 1 (donc allant de -1 à 1):
+
+<img src="doc/sawtooth_1hz.png">
 
 Retournez un tableau Numpy de réels représentant une onde en dent de scie. Voici la formule d'une telle onde :
 
