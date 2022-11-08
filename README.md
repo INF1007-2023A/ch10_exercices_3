@@ -52,6 +52,15 @@ Où t est le temps en secondes (même concepts que dans la fonction précédente
 Indices :
     [numpy.sign](https://numpy.org/doc/stable/reference/generated/numpy.sign.html)
 
+### Dents de scie (`sawtooth`)
+
+Retournez un tableau Numpy de réels représentant une onde en dent de scie. Voici la formule d'une telle onde :
+
+<!-- y(t) = A \cdot 2 \left( t \cdot F - \left \lfloor \frac{1}{2} + t \cdot F \right \rfloor  \right) -->
+<img src="https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20y%28t%29%20%3D%20A%20%5Ccdot%202%20%5Cleft%28%20t%20%5Ccdot%20F%20-%20%5Cleft%20%5Clfloor%20%5Cfrac%7B1%7D%7B2%7D%20&plus;%20t%20%5Ccdot%20F%20%5Cright%20%5Crfloor%20%5Cright%29">
+
+Où *t* est le temps en secondes.
+
 ### Conversion en octets (`convert_to_bytes` et `convert_to_samples`)
 
 Même chose que pour les exercices du chapitre 88, mais en utilisant les fonctionnalités de Numpy.
