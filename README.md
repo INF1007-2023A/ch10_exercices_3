@@ -4,7 +4,7 @@
 
 Nous allons reprendre l'exemple du chapitre 8 sur les fichiers WAV, mais en manipulant les signaux audio avec numpy plutôt qu'avec des listes et *struct*.
 
-## Structure d'un fichier WAV (rappel des exercices 8)
+## Structure d'un fichier WAV (rappel des exercices ch. 8)
 
 En audio numérique, la modulation d’impulsion codée (PCM en anglais) est une méthode utilisée pour représenter numériquement un signal analogique échantillonné. C’est ce qui est utilisé dans les ordinateurs, dans les CD audio et en téléphonie numérique. Dans un flux PCM, l’amplitude du signal analogique est enregistrée comme une valeur numérique à intervalles réguliers, c’est ce qu’on appelle l’échantillonnage. L’intervalle entre les échantillons est donné par la fréquence d’échantillonnage, qui est exprimée en Hz.
 
@@ -28,7 +28,7 @@ Rappel : voici de quoi a l'air une onde sinusoïdale de 1Hz avec une amplitude d
 
 <img src="doc/sine_1hz.png">
 
-Retournez un tableau Numpy de réels où chaque élément est un échantillon d'une onde sinusoïdale. On se rappelle de la formule de la valeur y d'une onde sinusoïdale à l'angle x en fonction de sa fréquence F et de son amplitude A :
+Retournez un tableau Numpy de réels où chaque élément est un échantillon d'une onde sinusoïdale. On se rappelle de la formule de la valeur *y* d'une onde sinusoïdale à l'angle *x* en fonction de sa fréquence *F* et de son amplitude *A* :
 
 <!-- y(x) = A \cdot \sin(F \cdot x) -->
 <img src="https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20y%28x%29%20%3D%20A%20%5Ccdot%20%5Csin%28F%20%5Ccdot%20x%29">
@@ -73,18 +73,6 @@ Retournez un tableau Numpy de réels représentant une onde en dent de scie. Voi
 
 Où *t* est le temps en secondes.
 
-### Conversion en octets (`convert_to_bytes` et `convert_to_samples`)
-
-Même chose que pour les exercices du chapitre 88, mais en utilisant les fonctionnalités de Numpy.
-
-Indices:
-    [numpy.round](https://numpy.org/doc/stable/reference/generated/numpy.round.html),
-    [numpy.clip](https://numpy.org/doc/stable/reference/generated/numpy.clip.html),
-    [numpy.ndarray.astype](https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.ndarray.astype.html),
-    [numpy.ndarray.tobytes](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.tobytes.html),
-    [Les dtype de Numpy](https://numpy.org/doc/stable/reference/arrays.dtypes.html#arrays-dtypes-constructing),
-    [numpy.frombuffer](https://numpy.org/doc/stable/reference/generated/numpy.frombuffer.html)
-
 ### Sinusoïdal avec harmoniques (`sine_with_overtones`)
 
 En acoustique et en musique, une note est une onde composée d'une fréquence fondamentale et d'ondes dont la fréquence est un multiple entier de la fondamentale ([ses harmoniques](https://en.wikipedia.org/wiki/Harmonic_series_(music))).
@@ -99,9 +87,44 @@ sig = sine_with_overtones(440, 1, ((2, 0.5), (3, 0.25), (4, 0.1)), 10)
 
 On obtiendrait un signal dont la fondamentale est 440 Hz, et dont la première harmonique (ou *partielle* si on veut être pédantique) est 2 fois la fréquence fondamentale et moitié moins forte. La deuxième harmonique est trois fois la fondamentale et 25% aussi fort, etc.
 
+## Manipulation de signaux
+
 ### Normalisation d'un signal (`normalize`)
 
 Normalisez un signal à une certaine amplitude. Pour ce faire, il faut trouver l'échantillon le plus haut en valeur absolue, puis calculer le coefficient à appliquer pour ammener l'échantillon maximal à la cible de normalisation. On applique ensuite ce coefficient à tout le signal.
 
 Indices:
     [numpy.absolute](https://numpy.org/doc/stable/reference/generated/numpy.absolute.html)
+
+### Conversion en octets (`convert_to_bytes` et `convert_to_samples`)
+
+Même chose que pour les exercices du chapitre 8, mais en utilisant les fonctionnalités de Numpy.
+
+Indices:
+    [numpy.round](https://numpy.org/doc/stable/reference/generated/numpy.round.html),
+    [numpy.clip](https://numpy.org/doc/stable/reference/generated/numpy.clip.html),
+    [numpy.ndarray.astype](https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.ndarray.astype.html),
+    [numpy.ndarray.tobytes](https://numpy.org/doc/stable/reference/generated/numpy.ndarray.tobytes.html),
+    [Les dtype de Numpy](https://numpy.org/doc/stable/reference/arrays.dtypes.html#arrays-dtypes-constructing),
+    [numpy.frombuffer](https://numpy.org/doc/stable/reference/generated/numpy.frombuffer.html)
+
+## Analyse de signaux
+
+### Transformée de Fourier (`apply_fft`)
+
+Il est souvent très utile de visualiser et de traiter la densité des fréquences présentes dans un signal plutôt que le signal lui-même. Observons le graphique ci-dessous d'un accord joué au piano. Il faut faire une bonne quantité de calculs mentaux pour déterminer quelles notes ont été jouées pour produire ce signal.
+
+<img src="doc/a_major.png">
+
+La transformée de Fourier associe à tout signal une fonction dont la variable indépendante représente (dans notre cas) la fréquence. La variable dépendante est la magnitude (il en existe plusieurs noms), ou la densité de chacune des fréquences dans le signal.
+
+Le graphique ci-dessous est la transformée de Fourier du signal précédant :
+
+<img src="doc/fft_a_major.png">
+
+Une fois dans le domaine fréquentiel, on peut facilement identifier les fréquences qui composent le signal ainsi que leurs proportions. Dans ce cas, on observe les fréquences correspondantes à un accord parfait de La majeur.
+
+Avec le module de FFT (Fast Fourier Transform) de SciPy, on s'épargne les mathématiques un peu lourde et on appelle `scipy.fft.fft` en lui passant notre signal. Ceci nous donne notre axe de magnitude (on peut le normaliser). Il faut aussi construire l'axe fréquentiel qui va avec. Il y a un exemple dans les notes de cours sur l'utilisation des FFT. Il faut faire attention à la longueur des axes.
+
+Doc de SciPy : [scipy.fft.fft](https://docs.scipy.org/doc/scipy/reference/generated/scipy.fft.fft.html)
+

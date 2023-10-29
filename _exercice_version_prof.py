@@ -116,6 +116,7 @@ def convert_to_samples(data_bytes):
 	int_samples = np.frombuffer(data_bytes, dtype="<i2")
 	# 2. Convertir en réel dans [-1, 1]
 	samples = int_samples.astype(float) / MAX_INT_SAMPLE_VALUE
+	return samples
 
 def apply_fft(sig, sampling_rate):
 	"""
