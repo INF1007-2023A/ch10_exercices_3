@@ -41,7 +41,7 @@ Si on veut le *x* qui correspond à un moment *t* (en secondes), on peut dire qu
 Or, on a autant de valeurs de *t* qu'on a d'échantillons. Vous devez donc utiliser le taux d'échantillonage (constante `SAMPLING_FREQ` dans le code) pour calculer le nombre d'échantillons nécessaires pour une durée donnée.
 
 Indices :
-    [numpy.arange](https://numpy.org/doc/stable/reference/generated/numpy.arange.html),
+    [numpy.linspace](https://numpy.org/doc/stable/reference/generated/numpy.linspace.html),
     [numpy.sin](https://numpy.org/doc/stable/reference/generated/numpy.sin.html)
 
 ### Carré (`square`)
@@ -82,7 +82,7 @@ Générez un signal sinusoïdal avec ses harmoniques qui sont passées en param�
 Par exemple, en faisant :
 
 ```python
-sig = sine_with_overtones(440, 1, ((2, 0.5), (3, 0.25), (4, 0.1)), 10)
+sig = sine_with_overtones(440, 1, {2: 0.5, 3: 0.25, 4: 0.1}, 10)
 ```
 
 On obtiendrait un signal dont la fondamentale est 440 Hz, et dont la première harmonique (ou *partielle* si on veut être pédantique) est 2 fois la fréquence fondamentale et moitié moins forte. La deuxième harmonique est trois fois la fondamentale et 25% aussi fort, etc.

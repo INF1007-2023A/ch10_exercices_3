@@ -12,9 +12,11 @@ import scipy as sp
 import matplotlib.pyplot as plt
 
 
-SAMPLING_FREQ = 44100 # Hertz, taux d'échantillonnage standard des CD
-SAMPLE_WIDTH = 16 # Échantillons de 16 bit
-MAX_INT_SAMPLE_VALUE = 2**(SAMPLE_WIDTH-1) - 1
+SAMPLING_FREQ = 44_100 # Hertz, taux d'échantillonnage standard des CD
+SAMPLE_BITS = 16 # Échantillons de 16 bit
+SAMPLE_WIDTH = SAMPLE_BITS // 16
+MAX_INT_SAMPLE_VALUE = 2**(SAMPLE_BITS-1) - 1
+
 
 
 # Un tuple contenant les signaux d'un accord parfait majeur.
@@ -43,8 +45,8 @@ def sine(freq, amplitude, duration):
 	# Générer une onde sinusoïdale à partir de la fréquence et de l'amplitude donnée, sur le temps demandé et considérant le taux d'échantillonnage.
 	# Formule de la valeur y d'une onde sinusoïdale à l'angle x en fonction de sa fréquence F et de son amplitude A :
 	# y = A * sin(F * x), où x est en radian.
-	# Si on veut le x qui correspond au moment t, on peut dire que 2π représente une seconde, donc x = t * 2π,
-	# Or t est en secondes, donc t = i / nb_échantillons_par_secondes, où i est le numéro d'échantillon.
+	# Si on veut le x qui correspond au moment t, on peut dire que 2π représente une seconde, donc x = t * 2π
+	# On utilise la fonction précédente pour générer les t
 	pass
 
 def square(freq, amplitude, duration):
@@ -92,7 +94,7 @@ def apply_fft(sig, sampling_rate):
 
 	:param sampling_rate: Le taux d'échantillonnage, en Hz, du signal.
 
-	:returns: L'axe de magnitude normalisée de la FFT (partie réelle seulement) et axe fréquentiel associé.
+	:returns: L'axe de magnitude normalisée (entre 0 et 1) de la FFT (partie réelle seulement) et l'axe fréquentiel associé.
 	"""
 	
 	# TODO: Créer l'axe fréquentiel approprié.
@@ -107,7 +109,7 @@ def apply_fft(sig, sampling_rate):
 	#         - En valeurs absolues (les valeurs négatives sont des résultats déphasés)
 	#         - On normalise en divisant par la moitié du nombre d'échantillons (taille du signal)
 
-	# On retourne les deux axes, avec l'axe de magnitude en premier
+	# On retourne les deux axes, avec l'axe de magnitude en premier.
 	pass
 
 
@@ -126,7 +128,8 @@ def main():
 	square_chord = build_major_chord(root_freq, square, duration)
 	saw_chord = build_major_chord(root_freq, sawtooth, duration)
 	# Un La3 avec quelques harmoniques.
-	note_with_overtones = sine_with_overtones(root_freq, 1, {i: 0.5**(i-1) for i in range(2, 10)}, duration)
+	overtone_values = {i: 0.5**(i-1) for i in range(2, 10)}
+	note_with_overtones = sine_with_overtones(root_freq, 1, overtone_values, duration)
 
 	# On affiche une onde d'exemple.
 	xs = generate_sample_time_points(duration)
@@ -157,7 +160,7 @@ def main():
 	with wave.open("output/perfect_fifth_panned.wav", "wb") as writer:
 		# On fait la config du writer (2 channels, échantillons de deux octets, fréquence d'échantillonnage).
 		writer.setnchannels(2)
-		writer.setsampwidth(2)
+		writer.setsampwidth(SAMPLE_WIDTH)
 		writer.setframerate(SAMPLING_FREQ)
 		# On met les samples dans des channels séparés (la à gauche, mi à droite), et on écrit dans le fichier
 		merged = merge_channels([saw_chord.root, saw_chord.fifth])
@@ -166,7 +169,7 @@ def main():
 	with wave.open("output/major_chord.wav", "wb") as writer:
 		# On fait la config du writer (1 channel, échantillons de deux octets, fréquence d'échantillonnage).
 		writer.setnchannels(1)
-		writer.setsampwidth(2)
+		writer.setsampwidth(SAMPLE_WIDTH)
 		writer.setframerate(SAMPLING_FREQ)
 		# On écrit un accord majeur dans le fichier.
 		writer.writeframes(convert_to_bytes(sine_chord.chord))
@@ -174,7 +177,7 @@ def main():
 	with wave.open("output/overtones.wav", "wb") as writer:
 		# On fait la config du writer (1 channel, échantillons de deux octets, fréquence d'échantillonnage).
 		writer.setnchannels(1)
-		writer.setsampwidth(2)
+		writer.setsampwidth(SAMPLE_WIDTH)
 		writer.setframerate(SAMPLING_FREQ)
 		# On écrit une note avec harmoniques dans le fichier.
 		writer.writeframes(convert_to_bytes(note_with_overtones))
